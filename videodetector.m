@@ -1,28 +1,21 @@
-%{
-X1 = imread('photo.jpg');
-SE = strel('diamond', 3);
-X2 = imerode(X1,SE);
-im_gray=rgb2gray(X2);
-im_R=X2(:,:,1);
-im_r=imsubtract(im_R,im_gray);
-
 figure(1)
-subplot(121); imshow(X1); title('Image couleur RGB');
-subplot(122); imshow(im_r); title('Image résultante');
-%}
-
-%{
-a=VideoReader('test.mp4');
-for img = 1:1:100;
-    filename=strcat('frame',num2str(img),'.jpg');
-    b = read(a, img);
-    imshow(b);
-    imwrite(b,filename);
-end
-movie(img)
-%}
-
-a=VideoReader('test.mp4');
-for img = 1:1:100;
+for img = 1:1:750;
+    data = imread(strcat('frame',num2str(img),'.jpg'));
+    diff = imsubtract(data(:,:,1), rgb2gray(data));
+    diff = im2bw(diff,0.15);
+    diff = bwareaopen(diff,300);
     
+    nb = bwlabel(diff, 8);
+    box = regionprops(nb, 'BoundingBox', 'Centroid');
+    
+    subplot(111); 
+    imshow(data);
+    hold on
+ 
+    for object = 1:length(box)
+        bb = box(object).BoundingBox;
+        rectangle('Position',bb,'EdgeColor','red','LineWidth',1)
+    end
+    hold off
+    drawnow;
 end
