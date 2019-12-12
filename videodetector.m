@@ -1,18 +1,13 @@
 figure(1)
 vid = VideoReader('test1.mp4');
+get(vid);
 nbr = vid.NumberOfFrames;
 
-for img = 1:nbr
+for img = 1:1:nbr
     %Diviser la video en images
-    video = strcat('frame',num2str(img),'.jpg');
-    image = read(vid, img);
-    imshow(image);
-    imwrite(image,video);
+    image1 = read(vid, img);
+    imshow(image1,[]);
     
-    %Lecture de chaque frame
-    image1 = imread(video);
-    
-    %
     diamond = strel('diamond', 3);
     erode = imerode(image1,diamond);
     
@@ -27,14 +22,13 @@ for img = 1:nbr
     %Affichage de l'image
     subplot(111); 
     imshow(image1);
+    
     hold on
- 
     %Boucle permettant d'afficher le rectangle
     for object = 1:length(box)
         bb = box(object).BoundingBox;
         rectangle('Position',bb,'EdgeColor','red','LineWidth',1)
     end
     hold off
-    
     drawnow;
 end
