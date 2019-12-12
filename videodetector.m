@@ -19,7 +19,7 @@ for img = 1:nbr
     %Soustraction de la couleur rouge
     diff = imsubtract(erode(:,:,1), rgb2gray(erode));
     diff = im2bw(diff,0.15);
-    diff = bwareaopen(diff,300);
+    diff = bwareaopen(diff,500);
     
     nb = bwlabel(diff, 8);
     box = regionprops(nb, 'BoundingBox', 'Centroid');
