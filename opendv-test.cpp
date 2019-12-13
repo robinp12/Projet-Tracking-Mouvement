@@ -72,6 +72,19 @@ int main(int argc, char** argv)
         double dM01 = masse.m01;
         double dM10 = masse.m10;
         double areaComplete = masse.m00;
+        
+        /*
+        CommandLineParser parser( argc, argv, "{@input | stuff.jpg | input image}" );
+    Mat src = imread( samples::findFile( parser.get<String>( "@input" ) ) );
+    if( src.empty() )
+    {
+        cout << "Could not open or find the image!\n" << endl;
+        cout << "usage: " << argv[0] << " <Input image>" << endl;
+        return -1;
+    }
+    cvtColor( src, src_gray, COLOR_BGR2GRAY );
+    blur( src_gray, src_gray, Size(3,3) );
+    */
  
         if (zoneTot > 10000)
         {
@@ -81,6 +94,9 @@ int main(int argc, char** argv)
 
             if (posX >= 0 && posY >= 0 && posX >= 0 && posY >= 0)
             {
+                
+                //tracer unrectangle atour de la forme repérée 
+                //rectangle(imgLines, Point(posX, posY), Point(posX, posY), Scalar(55, 124, 255), 5);
                 //tracer une ligne rouge qui va de la dernière position à la position actuelle
                 line(imgLines, Point(posX, posY), Point(posX, posY), Scalar(0, 0, 255), 2);
             }
@@ -89,10 +105,16 @@ int main(int argc, char** argv)
             varY = varY;
         
         }
-        
-
-        
-
+        /*
+        Mat drawing = Mat::zeros( canny_output.size(), CV_8UC3 );
+        for( size_t i = 0; i< contours.size(); i++ )
+    {
+        Scalar color = Scalar( rng.uniform(0, 256), rng.uniform(0,256), rng.uniform(0,256) );
+        drawContours( drawing, contours_poly, (int)i, color );
+        rectangle( drawing, boundRect[i].tl(), boundRect[i].br(), color, 2 );
+        circle( drawing, centers[i], (int)radius[i], color, 2 );
+    }
+    */
         imshow("Thresholded Vid", newVid); //monter l'image treshold
 
         fraOrgn = fraOrgn + imgLines;
