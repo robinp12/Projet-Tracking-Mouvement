@@ -46,40 +46,38 @@ int main(int argc, char** argv)
     while (true)
     {
         Mat fraOrgn;
+        Mat imgHSV;
+        Mat newVid;
+        
+         cvtColor(fraOrgn, imgHSV, COLOR_BGR2HSV); //convertir la frame de BGR en HSV
+
+        
+
+        inRange(imgHSV, Scalar(hueB, satB, valB), Scalar(hueH, satH, valH), newVid); //Threshold l'image
+
+        bool okayV = vid.read(fraOrgn); // lire une nouvelle frame de la vidéo
 
 
-        bool bSuccess = vid.read(fraOrgn); // lire une nouvelle frame de la vidéo
 
-
-
-        if (!bSuccess) //si ça ne fonctionne pas stopper la boucle
+        if (!okayV) //si ça ne fonctionne pas stopper la boucle
         {
             cout << "Cannot read a frame from video stream" << endl;
             break;
         }
-
-        Mat imgHSV;
-
-        cvtColor(fraOrgn, imgHSV, COLOR_BGR2HSV); //convertir la frame de BGR en HSV
-
-        Mat newVid;
-
-        inRange(imgHSV, Scalar(hueB, satB, valB), Scalar(hueH, satH, valH), newVid); //Threshold l'image
-
         
 
-        //Calculate the moments of the thresholded image
-        Moments oMoments = moments(newVid);
+        //trouver le centre de la masse
+        Moments masse = moments(newVid);
 
-        double dM01 = oMoments.m01;
-        double dM10 = oMoments.m10;
-        double areaComplete = oMoments.m00;
+        double dM01 = masse.m01;
+        double dM10 = masse.m10;
+        double areaComplete = masse.m00;
  
-        if (areaComplete > 10000)
+        if (zoneTot > 10000)
         {
             //Noter la position de la cible
-            int posX = dM10 / areaComplete;
-            int posY = dM01 / areaComplete;
+            int varX = dM10 / zoneTot;
+            int varY = dM01 / zoneTot;
 
             if (posX >= 0 && posY >= 0 && posX >= 0 && posY >= 0)
             {
@@ -87,8 +85,8 @@ int main(int argc, char** argv)
                 line(imgLines, Point(posX, posY), Point(posX, posY), Scalar(0, 0, 255), 2);
             }
 
-            posX = posX;
-            posY = posY;
+            varX = varX;
+            varY = varY;
         
         }
         
